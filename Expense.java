@@ -1,64 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
 public class Expense extends JFrame {
-
-    JTextField amountField;
-    JTextField descriptionField;
-
-    public Expense() {
-
-        setTitle("Expense");
-        setSize(400, 300);
-        setLayout(new FlowLayout());
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-        JLabel title = new JLabel("ADD EXPENSE");
-
-        JLabel amount = new JLabel("Amount:");
-        JLabel description = new JLabel("Description:");
-
-        amountField = new JTextField(20);
-        descriptionField = new JTextField(20);
-
-        JButton addButton = new JButton("Add Expense");
-
-        add(title);
-        add(amount);
-        add(amountField);
-        add(description);
-        add(descriptionField);
-        add(addButton);
-
-        addButton.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-
-                String amountText = amountField.getText();
-                String descriptionText = descriptionField.getText();
-
-                if (amountText.isEmpty() || descriptionText.isEmpty()) {
-
-                    JOptionPane.showMessageDialog(
-                        Expense.this,
-                        "Please enter all details."
-                    );
-
-                } else {
-
-                    JOptionPane.showMessageDialog(
-                        Expense.this,
-                        "Expense added successfully!"
-                    );
-                }
-            }
-        });
-
-        setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        new Expense();
-    }
+    JTextField amountField, descriptionField;
+    public Expense(){FinanceUI.setupFrame(this,"Add expense | Finova",520,460);JPanel root=FinanceUI.page();root.add(FinanceUI.header("Money out","Add expense","Keep track of purchases, bills and everyday spending.",FinanceUI.RED),BorderLayout.NORTH);
+        JPanel form=FinanceUI.card(new GridBagLayout());GridBagConstraints c=new GridBagConstraints();c.gridx=0;c.weightx=1;c.fill=GridBagConstraints.HORIZONTAL;c.insets=new Insets(7,0,7,0);c.anchor=GridBagConstraints.WEST;c.gridy=0;form.add(FinanceUI.label("Amount (₹)"),c);c.gridy++;amountField=FinanceUI.field(22);form.add(amountField,c);c.gridy++;form.add(FinanceUI.label("Expense description"),c);c.gridy++;descriptionField=FinanceUI.field(22);form.add(descriptionField,c);c.gridy++;JLabel hint=new JLabel("Tip: use a short description you will recognize later.");hint.setFont(new Font("SansSerif",Font.PLAIN,13));hint.setForeground(FinanceUI.MUTED);form.add(hint,c);root.add(form,BorderLayout.CENTER);
+        JPanel buttons=new JPanel(new FlowLayout(FlowLayout.RIGHT,10,0));buttons.setOpaque(false);JButton cancel=FinanceUI.button("Cancel",FinanceUI.NAVY),save=FinanceUI.button("Save expense",FinanceUI.RED);cancel.addActionListener(e->dispose());save.addActionListener(e->saveExpense());buttons.add(cancel);buttons.add(save);root.add(buttons,BorderLayout.SOUTH);setContentPane(root);FinanceUI.show(this);}
+    private void saveExpense(){String a=amountField.getText().trim(),d=descriptionField.getText().trim();if(a.isEmpty()||d.isEmpty()){JOptionPane.showMessageDialog(this,"Please enter the amount and description.","Missing details",JOptionPane.WARNING_MESSAGE);return;}try{double v=Double.parseDouble(a);if(v<=0){JOptionPane.showMessageDialog(this,"Amount must be greater than zero.");return;}Menu.totalExpense+=v;Menu.transactions.add("Expense | "+d+" | "+Menu.money(v));JOptionPane.showMessageDialog(this,"Expense saved successfully!","Saved",JOptionPane.INFORMATION_MESSAGE);dispose();Menu.showDashboard();}catch(NumberFormatException ex){JOptionPane.showMessageDialog(this,"Please enter a valid amount.","Invalid amount",JOptionPane.WARNING_MESSAGE);}}
+    public static void main(String[] args){SwingUtilities.invokeLater(Expense::new);}
 }
