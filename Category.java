@@ -1,58 +1,6 @@
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-
+import javax.swing.*;import javax.swing.border.*;import java.awt.*;
 public class Category extends JFrame {
-
-    JTextField categoryField;
-
-    public Category() {
-
-        setTitle("Category");
-        setSize(400, 250);
-        setLayout(new FlowLayout());
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-        JLabel title = new JLabel("ADD CATEGORY");
-        JLabel label = new JLabel("Category Name:");
-
-        categoryField = new JTextField(20);
-
-        JButton addButton = new JButton("Add Category");
-
-        add(title);
-        add(label);
-        add(categoryField);
-        add(addButton);
-
-        addButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                String category = categoryField.getText();
-
-                if (category.isEmpty()) {
-
-                    JOptionPane.showMessageDialog(
-                        Category.this,
-                        "Please enter a category."
-                    );
-
-                } else {
-
-                    JOptionPane.showMessageDialog(
-                        Category.this,
-                        "Category added: " + category
-                    );
-                }
-            }
-        });
-
-        setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        new Category();
-    }
+ private final JFrame parent; JTextField categoryField;
+ public Category(){this(null);} public Category(JFrame parent){this.parent=parent;FinanceUI.setupFrame(this,"Categories | Finova",520,430);JPanel root=FinanceUI.page();root.add(FinanceUI.header("Stay organized","Manage categories","Create labels to keep your finances organized.",FinanceUI.PURPLE),BorderLayout.NORTH);JPanel form=FinanceUI.card(new BorderLayout(0,14));form.add(FinanceUI.label("New category name"),BorderLayout.NORTH);categoryField=FinanceUI.field(22);form.add(categoryField,BorderLayout.CENTER);DefaultListModel<String> model=new DefaultListModel<>();for(String s:Menu.categories)model.addElement(s);JList<String> list=new JList<>(model);list.setFont(new Font("SansSerif",Font.PLAIN,15));list.setFixedCellHeight(30);JScrollPane scroll=new JScrollPane(list);scroll.setBorder(new TitledBorder(new LineBorder(new Color(225,229,241)),"Existing categories"));form.add(scroll,BorderLayout.SOUTH);root.add(form,BorderLayout.CENTER);JPanel buttons=new JPanel(new FlowLayout(FlowLayout.RIGHT,10,0));buttons.setOpaque(false);JButton cancel=FinanceUI.button("Cancel",FinanceUI.NAVY),add=FinanceUI.button("Add category",FinanceUI.PURPLE);cancel.addActionListener(e->dispose());add.addActionListener(e->{String s=categoryField.getText().trim();if(s.isEmpty()){JOptionPane.showMessageDialog(this,"Please enter a category name.");}else if(Menu.categories.contains(s)){JOptionPane.showMessageDialog(this,"That category already exists.");}else{Menu.categories.add(s);model.addElement(s);JOptionPane.showMessageDialog(this,"Category added: "+s,"Saved",JOptionPane.INFORMATION_MESSAGE);dispose();if(this.parent!=null){this.parent.setVisible(true);this.parent.toFront();}else Menu.showDashboard();}});buttons.add(cancel);buttons.add(add);root.add(buttons,BorderLayout.SOUTH);setContentPane(root);FinanceUI.show(this);}
+ public static void main(String[] args){SwingUtilities.invokeLater(Category::new);}
 }
