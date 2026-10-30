@@ -1,6 +1,41 @@
-import javax.swing.*;import javax.swing.border.*;import java.awt.*;
-public class Transaction extends JFrame {
- JTextField transactionField;
- public Transaction(){FinanceUI.setupFrame(this,"Transactions | Finova",640,540);JPanel root=FinanceUI.page();root.add(FinanceUI.header("Activity","Transactions","Your recent income, expenses and notes in one place.",FinanceUI.BLUE),BorderLayout.NORTH);JPanel body=FinanceUI.card(new BorderLayout(0,14));DefaultListModel<String> model=new DefaultListModel<>();for(String s:Menu.transactions)model.addElement(s);JList<String> list=new JList<>(model);list.setFont(new Font("SansSerif",Font.PLAIN,15));list.setFixedCellHeight(34);list.setSelectionBackground(new Color(229,235,255));list.setSelectionForeground(FinanceUI.NAVY);JScrollPane scroll=new JScrollPane(list);scroll.setBorder(new TitledBorder(new LineBorder(new Color(225,229,241)),"Saved activity"));body.add(scroll,BorderLayout.CENTER);JPanel addPanel=new JPanel(new BorderLayout(10,0));addPanel.setOpaque(false);transactionField=FinanceUI.field(22);transactionField.setToolTipText("Enter a note or transaction detail");JButton save=FinanceUI.button("Add note",FinanceUI.BLUE);save.addActionListener(e->{String s=transactionField.getText().trim();if(s.isEmpty()){JOptionPane.showMessageDialog(this,"Please enter transaction details.");return;}String row="Transaction | "+s;Menu.transactions.add(row);model.addElement(row);transactionField.setText("");JOptionPane.showMessageDialog(this,"Transaction saved!","Saved",JOptionPane.INFORMATION_MESSAGE);});addPanel.add(transactionField,BorderLayout.CENTER);addPanel.add(save,BorderLayout.EAST);body.add(addPanel,BorderLayout.SOUTH);root.add(body,BorderLayout.CENTER);JPanel buttons=new JPanel(new FlowLayout(FlowLayout.RIGHT,10,0));buttons.setOpaque(false);JButton done=FinanceUI.button("Done",FinanceUI.NAVY);done.addActionListener(e->{dispose();Menu.showDashboard();});buttons.add(done);root.add(buttons,BorderLayout.SOUTH);setContentPane(root);FinanceUI.show(this);}
- public static void main(String[] args){SwingUtilities.invokeLater(Transaction::new);}
+import javax.swing.*;
+import javax.swing.border.*;
+import java.awt.*;
+public class Transaction extends JFrame  {
+    JTextField transactionField;
+    public Transaction() {
+        FinanceUI.setupFrame(this,"Transactions | Finova",640,540);
+        JPanel root=FinanceUI.page();
+        root.add(FinanceUI.header("Activity","Transactions","Your recent income, expenses and notes in one place.",FinanceUI.BLUE),BorderLayout.NORTH);
+        JPanel body=FinanceUI.card(new BorderLayout(0,14));
+        DefaultListModel<String> model=new DefaultListModel<>();
+        for(String s:Menu.transactions)model.addElement(s);
+        JList<String> list=new JList<>(model);
+        FinanceUI.styleList(list);
+        JScrollPane scroll=new JScrollPane(list);
+        FinanceUI.styleScroll(scroll);
+        scroll.setBorder(new TitledBorder(new LineBorder(FinanceUI.BORDER),"SAVED ACTIVITY",TitledBorder.LEADING,TitledBorder.TOP,new Font("Segoe UI",Font.BOLD,12),FinanceUI.MUTED));
+        body.add(scroll,BorderLayout.CENTER);
+        JPanel addPanel=new JPanel(new BorderLayout(10,0));
+        addPanel.setOpaque(false);
+        transactionField=FinanceUI.field(22);
+        transactionField.setToolTipText("Enter a note or transaction detail");
+        JButton save=FinanceUI.button("Add note",FinanceUI.BLUE);
+        save.addActionListener(e->{String s=transactionField.getText().trim();if(s.isEmpty()){JOptionPane.showMessageDialog(this,"Please enter transaction details.");return;}String row="Transaction | "+s;Menu.transactions.add(row);model.addElement(row);transactionField.setText("");JOptionPane.showMessageDialog(this,"Transaction saved!","Saved",JOptionPane.INFORMATION_MESSAGE);});
+        addPanel.add(transactionField,BorderLayout.CENTER);
+        addPanel.add(save,BorderLayout.EAST);
+        body.add(addPanel,BorderLayout.SOUTH);
+        root.add(body,BorderLayout.CENTER);
+        JPanel buttons=new JPanel(new FlowLayout(FlowLayout.RIGHT,10,0));
+        buttons.setOpaque(false);
+        JButton done=FinanceUI.button("Done",FinanceUI.NAVY);
+        done.addActionListener(e->{dispose();Menu.showDashboard();});
+        buttons.add(done);
+        root.add(buttons,BorderLayout.SOUTH);
+        setContentPane(root);
+        FinanceUI.show(this);
+    }
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(Transaction::new);
+    }
 }
